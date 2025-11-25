@@ -1,0 +1,2 @@
+[staging_servers]
+vmubuntuone ansible_host=host.example.com
