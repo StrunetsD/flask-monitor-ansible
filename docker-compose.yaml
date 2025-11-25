@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  flask:
+    build:
+      context: app
+      dockerfile: Dockerfile
+    container_name: flask
+
+  nginx:
+    build:
+      context: nginx
+      dockerfile: Dockerfile.nginx
+    container_name: nginx
+    ports:
+      - "${HOST_NGINX_PORT}:${NGINX_PORT}"
+      - "${HOST_NGINX_SSL_PORT}:${NGINX_SSL_PORT}"
+    depends_on:
+      flask:
+        condition: service_started
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${NGINX_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
