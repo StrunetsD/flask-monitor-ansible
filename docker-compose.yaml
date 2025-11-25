@@ -27,3 +27,20 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  monitor:
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile
+    container_name: monitor
+    environment:
+      - APP_URL=${APP_URL}
+      - CHECK_INTERVAL=${CHECK_INTERVAL}
+      - RESTART_CMD=${RESTART_CMD}
+      - MONITOR_LOG=${MONITOR_LOG}
+    volumes:
+      - ./monitor/app_monitor.log:/app/app_monitor.log
+    depends_on:
+      - flask
+      - nginx
+    restart: always

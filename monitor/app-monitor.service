@@ -1,0 +1,14 @@
+[Unit]
+Description=App Monitoring Script
+After=network.target
+
+[Service]
+Type=simple
+User=monitor
+ExecStart=/opt/monitor/monitor.sh
+Restart=always
+RestartSec=5s
+EnvironmentFile=-/opt/monitor/.env 
+
+[Install]
+WantedBy=multi-user.target
